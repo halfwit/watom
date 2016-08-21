@@ -1,2 +1,3 @@
 Get window atom
-watom <wid> <ATOM_NAME> <ATOM_TYPE>
+
+watom `<wid> <ATOM_NAME> <ATOM_TYPE>`
