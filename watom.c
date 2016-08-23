@@ -20,7 +20,6 @@ usage(char *name)
 	exit(1);
 }
 
-const char *types[] = { "STRING", "UTF8_STRING", "COMPOUND_TEXT", "CARDINAL", "ATOM", "WM_HINTS", "WM_SIZE_HINTS"};
 
 static xcb_atom_t xcb_atom_get(xcb_connection_t *conn, const char *name)
 {
@@ -32,14 +31,15 @@ static xcb_atom_t xcb_atom_get(xcb_connection_t *conn, const char *name)
 static int
 get_watom(xcb_window_t win, char *prop)
 {
+
+  const char *types[] = { "STRING", "UTF8_STRING", "COMPOUND_TEXT", "CARDINAL", "ATOM", "WM_HINTS", "WM_SIZE_HINTS", NULL};
   int len = 0;
   xcb_get_property_cookie_t cookie;
   
-  size_t i;
-  for(i = 0; i < sizeof(types) / sizeof(char *); i++) {
+  for(const char **s = types; *s != NULL; s++) {
     cookie = xcb_get_property(conn, 0, win,
       xcb_atom_get(conn, prop),
-      xcb_atom_get(conn, types[i]),
+      xcb_atom_get(conn, *s),
       0L, 32L);
     xcb_get_property_reply_t *r;
     r = xcb_get_property_reply(conn, cookie, NULL);
