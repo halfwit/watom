@@ -21,9 +21,9 @@ usage(char *name)
 }
 
 
-static xcb_atom_t xcb_atom_get(xcb_connection_t *conn, const char *name)
+static xcb_atom_t xcb_atom_get(const char *name)
 {
-  xcb_intern_atom_cookie_t cookie = xcb_intern_atom(conn, 0, strlen(name), name);
+  xcb_intern_atom_cookie_t cookie = xcb_intern_atom(conn, 0, (unsigned short)strlen(name), name);
   xcb_intern_atom_reply_t *reply = xcb_intern_atom_reply(conn, cookie, NULL);
   return !reply ? XCB_ATOM_STRING : reply->atom;
 }
@@ -38,8 +38,8 @@ get_watom(xcb_window_t win, char *prop)
   
   for(const char **s = types; *s != NULL; s++) {
     cookie = xcb_get_property(conn, 0, win,
-      xcb_atom_get(conn, prop),
-      xcb_atom_get(conn, *s),
+      xcb_atom_get(prop),
+      xcb_atom_get(*s),
       0L, 32L);
     xcb_get_property_reply_t *r;
     r = xcb_get_property_reply(conn, cookie, NULL);
@@ -70,7 +70,7 @@ main(int argc, char **argv)
 
 	init_xcb(&conn);
 
-	r = get_watom(strtoul(argv[1], NULL, 16), argv[2]);
+	r = get_watom((unsigned int)strtoul(argv[1], NULL, 16), argv[2]);
 
 	kill_xcb(&conn);
 
