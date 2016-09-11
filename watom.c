@@ -52,8 +52,8 @@ get_watom(xcb_window_t win, char *prop)
         free(r);
         return 0;
       }
+      free(r);
     }
-    free(r);
   }
 
   warnx("could not get %s\n", prop);
